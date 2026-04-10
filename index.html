@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 待填充：页面标题（显示在浏览器标签页上），修改下方 <title> 内的文字 -->
+<title>蔡愚 | Yu Cai · Academic Homepage</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Franklin:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+<style>
+  :root {
+    --sidebar-w: 360px;              /* 可调整：侧边栏宽度 */
+    --ink: #1c1917;
+    --ink-secondary: #57534e;
+    --paper: #faf9f6;                /* 可调整：右侧背景色 */
+    --sidebar-bg: #0c1a2e;           /* 可调整：侧边栏背景色 */
+    --sidebar-text: #e2e8f0;
+    --sidebar-muted: #94a3b8;
+    --sidebar-accent: #60a5fa;       /* 可调整：侧边栏强调色 */
+    --accent: #1d4ed8;               /* 可调整：右侧内容区强调色 */
+    --accent-hover: #1e40af;
+    --divider: #d6d3d1;
+    --card-bg: #ffffff;
+    --tag-bg: #dbeafe;
+    --tag-text: #1d4ed8;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+    --radius: 6px;
+
+    /* ── 字体变量 ── */
+    --font-display-en: 'Playfair Display', serif;           /* 可调整：英文标题字体 */
+    --font-display-zh: 'Noto Serif SC', '宋体', serif;      /* 可调整：中文标题字体 */
+    --font-body-en: 'Libre Franklin', sans-serif;            /* 可调整：英文正文字体 */
+    --font-body-zh: 'Noto Sans SC', '微软雅黑', sans-serif;  /* 可调整：中文正文字体 */
+    --font-mono: 'IBM Plex Mono', monospace;                 /* 等宽 / 标签 */
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Libre Franklin', 'Noto Sans SC', '微软雅黑', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    font-weight: 400;
+    font-size: 16.5px;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ── 中英文差异化字体排版 ── */
+  /* 中文标题：思源宋体，更有学术气质 */
+  [data-lang="zh"] .section-title,
+  [data-lang="zh"] .sidebar h1,
+  [data-lang="zh"] .research-card h3,
+  [data-lang="zh"] .tl-item h3 {
+    font-family: var(--font-display-zh);
+    letter-spacing: 0.05em;
+  }
+  /* 英文标题：Playfair Display 衬线体 */
+  [data-lang="en"] .section-title,
+  [data-lang="en"] .sidebar h1,
+  [data-lang="en"] .research-card h3,
+  [data-lang="en"] .tl-item h3 {
+    font-family: var(--font-display-en);
+  }
+  /* 论文标题：始终使用英文字体（论文标题为英文） */
+  .pub-title {
+    font-family: var(--font-display-en);
+    letter-spacing: normal;
+  }
+  /* 中文正文字号微调（中文在同字号下视觉偏小） */
+  [data-lang="zh"] .bio-block,
+  [data-lang="zh"] .research-card p {
+    font-size: 1.05rem;
+    line-height: 1.65;
+  }
+  [data-lang="en"] .bio-block,
+  [data-lang="en"] .research-card p {
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+  /* 中文标题用思源宋体 */
+  [data-lang="zh"] .tl-item h3,
+  [data-lang="zh"] .teaching-item .t-course,
+  [data-lang="zh"] .project-name,
+  [data-lang="zh"] .award-desc {
+    font-family: var(--font-display-zh);
+  }
+  /* 侧边栏中文用黑体正文 */
+  [data-lang="zh"] .sidebar .affiliation,
+  [data-lang="zh"] .sidebar .title-line,
+  [data-lang="zh"] .sidebar-nav a {
+    font-family: var(--font-body-zh);
+  }
+
+  .layout {
+    display: flex;
+    min-height: 100vh;
+    /* background split: dark left, light right */
+    background: linear-gradient(to right, var(--sidebar-bg) var(--sidebar-w), var(--paper) var(--sidebar-w));
+  }
+
+  /* Centering wrapper: keeps sidebar + main within a max width */
+  .layout-center {
+    display: flex;
+    width: 100%;
+    max-width: 1400px;               /* 可调整：内容区最大宽度 */
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* ── LEFT SIDEBAR (FIXED) ── */
+  .sidebar {
+    position: fixed;
+    top: 0; bottom: 0;
+    width: var(--sidebar-w);
+    background: transparent; /* 背景色由 layout::before 提供，这里透明以显示底部背景图 */
+    color: var(--sidebar-text);
+    display: flex;
+    flex-direction: column;
+    padding: 3rem 2.2rem 2rem;
+    overflow: hidden;
+    z-index: 50;
+  }
+
+  /* 待填充：侧边栏底部背景图路径（替换下方 url 中的 'img/sidebar-bg.png'） */
+  .sidebar-bg-image {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: var(--sidebar-w);
+    height: 65%;                     /* 可调整：侧边栏背景图高度比例 */
+    background: url('img/sidebar-bg.png') bottom center / cover no-repeat;
+    pointer-events: none;
+    z-index: 40;                     /* 在 layout::before(0) 之上、sidebar 文字(50) 之下 */
+    opacity: 0.85;                   /* 可调整：侧边栏背景图透明度 */
+  }
+
+  /* Calculate sidebar left position to align with centered layout */
+  @media (min-width: 1401px) {
+    .sidebar {
+      left: calc((100vw - 1400px) / 2);
+    }
+    /* extend dark bg all the way to left edge */
+    .layout::before {
+      content: '';
+      position: fixed;
+      top: 0; bottom: 0;
+      left: 0;
+      width: calc((100vw - 1400px) / 2 + var(--sidebar-w));
+      background: var(--sidebar-bg);
+      z-index: 0;
+    }
+    /* bg image matches dark area width exactly */
+    .sidebar-bg-image {
+      width: calc((100vw - 1400px) / 2 + var(--sidebar-w));
+    }
+  }
+  @media (max-width: 1400px) {
+    .sidebar { left: 0; }
+  }
+  .sidebar-content {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+  /* Zone 1: avatar, name, icons — fixed at top */
+  .sidebar-top {
+    flex-shrink: 0;
+    padding-bottom: 1.2rem;
+  }
+  /* Zone 2: nav links — scrollable */
+  .sidebar-mid {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    padding: 0.8rem 0;
+    scrollbar-width: thin;
+    scrollbar-color: #1e3a5f transparent;
+  }
+  .sidebar-mid::-webkit-scrollbar { width: 3px; }
+  .sidebar-mid::-webkit-scrollbar-track { background: transparent; }
+  .sidebar-mid::-webkit-scrollbar-thumb { background: #1e3a5f; border-radius: 3px; }
+  .sidebar-mid::-webkit-scrollbar-thumb:hover { background: var(--sidebar-accent); }
+  /* Zone 3: lang toggle — fixed at bottom */
+  .sidebar-bottom {
+    flex-shrink: 0;
+    padding-top: 1.2rem;
+  }
+
+  .avatar {
+    width: 130px; height: 130px;
+    min-width: 130px; min-height: 130px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #0f2440;
+    border: 3px solid #1e3a5f;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Noto Serif SC', 'Playfair Display', serif;
+    font-size: 3rem; font-weight: 700;
+    color: var(--sidebar-accent);
+    margin-bottom: 1.6rem;
+    overflow: hidden;
+  }
+  .sidebar h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem; font-weight: 700;
+    line-height: 1.2; color: #fafaf9;
+    margin-bottom: 0.15rem;
+  }
+  .sidebar .name-en {
+    font-size: 1rem; color: var(--sidebar-muted);
+    font-weight: 300; margin-bottom: 1rem;
+    letter-spacing: 0.04em;
+  }
+  .sidebar .title-line {
+    font-size: 0.95rem; color: var(--sidebar-accent);
+    font-weight: 500; margin-bottom: 0.3rem;
+  }
+  .sidebar .affiliation {
+    font-size: 0.92rem; color: var(--sidebar-muted);
+    line-height: 1.5; margin-bottom: 1.8rem;
+  }
+
+  .sidebar-links {
+    display: flex; flex-direction: row;
+    gap: 0.7rem; margin-bottom: 0;
+  }
+  .sidebar-links a {
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; transition: transform 0.2s;
+  }
+  .sidebar-links a .icon-circle {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: #0f2440; border: 1px solid #1e3a5f;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: var(--sidebar-muted);
+    transition: background 0.2s, border-color 0.2s, transform 0.2s, color 0.2s;
+  }
+  .sidebar-links a .link-label { display: none; }
+  .sidebar-links a:hover .icon-circle {
+    background: #1e3a5f; border-color: var(--sidebar-accent);
+    color: var(--sidebar-accent);
+    transform: scale(1.1);
+  }
+
+  .sidebar-nav {
+    padding-top: 0; margin-bottom: 0;
+    padding-bottom: 0.5rem;
+  }
+  .sidebar-nav a {
+    display: block; font-size: 0.88rem; font-weight: 500;
+    color: var(--sidebar-muted); text-decoration: none;
+    padding: 0.45rem 0; letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.2s, padding-left 0.2s;
+  }
+  .sidebar-nav a:hover {
+    color: var(--sidebar-accent); padding-left: 0.5rem;
+  }
+
+  .lang-toggle {
+    position: relative; z-index: 1;
+    display: flex; background: #0f2440;
+    border: 1px solid #1e3a5f;
+    border-radius: 2rem; overflow: hidden;
+    width: fit-content;
+  }
+  .lang-btn {
+    padding: 0.4rem 1.1rem; font-size: 0.78rem;
+    font-weight: 600; font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 0.05em; border: none;
+    background: transparent; color: var(--sidebar-muted);
+    cursor: pointer; transition: all 0.25s;
+  }
+  .lang-btn.active {
+    background: var(--sidebar-accent);
+    color: var(--sidebar-bg);
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    margin-left: var(--sidebar-w);
+    flex: 1; min-height: 100vh;
+    padding: 3.5rem 3.5rem 4rem;
+    max-width: calc(1400px - var(--sidebar-w));
+    position: relative;
+    z-index: 1;
+  }
+  .main-inner { max-width: 900px; }
+
+  .section {
+    margin-bottom: 3.5rem;
+    opacity: 0; transform: translateY(18px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .section.visible { opacity: 1; transform: translateY(0); }
+
+  .section-header {
+    display: flex; align-items: center;
+    gap: 0.7rem; margin-bottom: 1.5rem;
+  }
+  .section-header .line { flex: 1; height: 1px; background: var(--divider); }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .bio-block {
+    background: var(--card-bg); border: 1px solid var(--divider);
+    border-radius: var(--radius); padding: 1.6rem 1.8rem;
+    font-size: 1rem; color: var(--ink-secondary);
+    line-height: 1.6; box-shadow: var(--shadow-sm);
+  }
+  .bio-block strong { color: var(--ink); font-weight: 600; }
+  .bio-block .highlight {
+    display: inline-block; background: var(--tag-bg);
+    color: var(--tag-text); padding: 0.1rem 0.5rem;
+    border-radius: 3px; font-weight: 600; font-size: 0.92rem;
+  }
+  .bio-callout {
+    background: var(--tag-bg);
+    border: 1px solid var(--accent);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 0.9rem 1.4rem;
+    margin-top: 1.5rem;
+    font-size: 1rem;
+    color: var(--accent);
+    font-weight: 500;
+    line-height: 1.55;
+  }
+
+  .research-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1rem;
+  }
+  .research-card {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: none;
+  }
+  .research-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
+  /* background image */
+  .research-card .rc-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.4s;
+    z-index: 0;
+  }
+  .research-card:hover .rc-bg { transform: scale(1.06); }
+  /* gradient overlay: transparent top → black bottom */
+  .research-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0) 20%, rgba(0,0,0,0.7) 100%);
+    z-index: 1;
+  }
+  /* text content sits on top */
+  .research-card .rc-content {
+    position: relative;
+    z-index: 2;
+    padding: 1.3rem 1.4rem;
+  }
+  .research-card .rc-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center; justify-content: center;
+    font-size: 1.1rem; margin-bottom: 0.8rem;
+  }
+  .research-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.08rem; font-weight: 700;
+    margin-bottom: 0.35rem; line-height: 1.3;
+    color: #fff;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+  .research-card p {
+    font-size: 0.84rem;
+    color: rgba(255,255,255,0.88);
+    line-height: 1.6;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  }
+
+  .pub-list { display: flex; flex-direction: column; gap: 1.3rem; }
+  .pub-item {
+    background: var(--card-bg); border: 1px solid var(--divider);
+    border-radius: var(--radius); padding: 1.3rem 1.5rem;
+    box-shadow: var(--shadow-sm); position: relative;
+    padding-left: 1.5rem; transition: box-shadow 0.2s;
+    overflow: hidden;
+  }
+  .pub-item::before {
+    content: ''; position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--sidebar-accent);
+    border-radius: 3px 0 0 3px;
+  }
+  .pub-item:hover { box-shadow: var(--shadow-md); }
+
+  /* ── pub image thumbnail with ripple expand ── */
+  .pub-thumb {
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--divider);
+    cursor: pointer;
+    z-index: 3;
+    transition: transform 0.2s;
+    background: var(--card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--ink-secondary);
+  }
+  .pub-thumb:hover { transform: scale(1.1); border-color: var(--accent); color: var(--accent); }
+
+  /* the ripple overlay — clips with circle, expands on hover */
+  .pub-image-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: var(--radius);
+  }
+  .pub-image-overlay img {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    clip-path: circle(0% at calc(100% - 30px) 30px);
+    transition: clip-path 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+  }
+  /* when hovering the thumbnail, expand the overlay */
+  .pub-thumb:hover ~ .pub-image-overlay img,
+  .pub-image-overlay:hover img {
+    clip-path: circle(150% at calc(100% - 30px) 30px);
+    pointer-events: auto;
+  }
+  .pub-image-overlay:hover {
+    pointer-events: auto;
+  }
+
+  /* ── abstract toggle ── */
+  .pub-abstract-toggle {
+    font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+    font-size: 0.72rem; font-weight: 500;
+    color: var(--ink-secondary);
+    background: none; border: 1px solid var(--divider);
+    border-radius: 3px;
+    padding: 0.2rem 0.6rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .pub-abstract-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .pub-abstract-toggle .arrow {
+    display: inline-block;
+    transition: transform 0.25s;
+    font-size: 0.65rem;
+  }
+  .pub-abstract-toggle.open .arrow {
+    transform: rotate(90deg);
+  }
+  .pub-highlight {
+    font-size: 0.84rem;
+    color: var(--accent);
+    font-weight: 500;
+    line-height: 1.6;
+    margin-bottom: 0.4rem;
+    padding: 0.35rem 0.6rem;
+    background: var(--tag-bg);
+    border-radius: 4px;
+    border-left: 3px solid var(--accent);
+  }
+  .pub-highlight {
+    font-size: 0.92rem;
+    color: var(--accent);
+    font-weight: 500;
+    line-height: 1.5;
+    margin-top: 0.6rem;
+    padding: 0.5rem 0.7rem;
+    background: var(--tag-bg);
+    border-radius: 4px;
+    border-left: 3px solid var(--accent);
+  }
+  .pub-abstract {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s, opacity 0.3s;
+    opacity: 0;
+    padding: 0 0;
+    margin-top: 0;
+  }
+  .pub-abstract.open {
+    max-height: 350px;
+    opacity: 1;
+    padding: 0.8rem 0 0.2rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--divider);
+  }
+  .pub-abstract p {
+    font-size: 0.92rem;
+    color: var(--ink-secondary);
+    line-height: 1.55;
+  }
+  .pub-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem; font-weight: 700;
+    background: var(--sidebar-bg); color: var(--sidebar-accent);
+    padding: 0.18rem 0.55rem; border-radius: 3px;
+    display: inline-block; margin-bottom: 0.5rem;
+  }
+  .pub-rank {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem; font-weight: 700;
+    background: var(--accent);
+    color: #fff;
+    padding: 0.15rem 0.45rem;
+    border-radius: 3px;
+    display: inline-block;
+    margin-left: 0.35rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.02em;
+  }
+  .pub-award {
+    font-size: 0.78rem; font-weight: 700;
+    background: #f59e0b;
+    color: #fff;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    display: inline-block;
+    margin-left: 0.35rem;
+    margin-bottom: 0.5rem;
+  }
+  .pub-rank-science {
+    background: #991b1b;
+  }
+  .pub-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-weight: 600;
+    line-height: 1.35; margin-bottom: 0.25rem;
+  }
+  .pub-authors {
+    font-family: var(--font-body-en);
+    font-size: 0.92rem; color: var(--ink-secondary); margin-bottom: 0.5rem;
+  }
+  .pub-authors .me {
+    color: var(--accent); font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--sidebar-accent);
+    text-underline-offset: 2px;
+  }
+  .pub-authors .advisor {
+    color: var(--ink);
+    font-weight: 600;
+    font-style: italic;
+  }
+  .pub-authors .advisor-note {
+    font-size: 0.72rem;
+    color: var(--ink-secondary);
+    font-style: normal;
+    vertical-align: super;
+    margin-left: 0.1rem;
+  }
+  .pub-footnote {
+    font-size: 0.78rem;
+    color: var(--ink-secondary);
+    margin-top: 1rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--divider);
+    line-height: 1.6;
+  }
+  .pub-footnote .me-inline {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--sidebar-accent);
+    text-underline-offset: 2px;
+  }
+  .pub-links { display: flex; gap: 0.45rem; flex-wrap: wrap; }
+  .pub-link {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem; color: var(--accent);
+    text-decoration: none; padding: 0.2rem 0.6rem;
+    border: 1px solid var(--divider); border-radius: 3px;
+    transition: all 0.2s; font-weight: 500;
+  }
+  .pub-link:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  /* venue / DOI link with distinct style */
+  .pub-link-venue {
+    border-color: var(--sidebar-accent);
+    color: var(--sidebar-accent);
+    background: rgba(96, 165, 250, 0.08);
+  }
+  .pub-link-venue:hover {
+    background: var(--sidebar-accent) !important;
+    color: var(--sidebar-bg) !important;
+    border-color: var(--sidebar-accent) !important;
+  }
+  /* secondary / contributing publications: subtler left border */
+  .pub-item-secondary::before {
+    background: var(--divider);
+  }
+  .pub-item-secondary .pub-badge {
+    background: #1e3a5f;
+    color: var(--sidebar-muted);
+  }
+
+  .timeline { position: relative; padding-left: 1.8rem; }
+  .timeline::before {
+    content: ''; position: absolute;
+    left: 0; top: 6px; bottom: 6px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--sidebar-accent), var(--divider));
+    border-radius: 1px;
+  }
+  .tl-item { position: relative; margin-bottom: 1.8rem; }
+  .tl-item:last-child { margin-bottom: 0; }
+  .tl-item::before {
+    content: ''; position: absolute;
+    left: -1.8rem; top: 8px;
+    width: 10px; height: 10px;
+    background: var(--paper);
+    border: 2px solid var(--sidebar-accent);
+    border-radius: 50%;
+    transform: translateX(-4px);
+  }
+  .tl-date { font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; color: var(--ink-secondary); }
+  .tl-item h3 { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 600; line-height: 1.35; }
+  .tl-item .tl-detail { font-family: var(--font-body-en); font-size: 0.85rem; color: var(--ink-secondary); line-height: 1.5; }
+
+  .teaching-list { display: flex; flex-direction: column; gap: 0.3rem; }
+  .teaching-item { display: flex; gap: 1rem; align-items: baseline; padding: 0.25rem 0; }
+  .teaching-item .t-term {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem; color: var(--ink-secondary);
+    flex-shrink: 0; width: 90px;
+  }
+  .teaching-item .t-course { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 600; line-height: 1.35; }
+  .teaching-item .t-role {
+    font-family: var(--font-body-en); font-size: 0.85rem; color: var(--ink-secondary);
+    margin-left: auto; flex-shrink: 0;
+  }
+
+  /* ── PROJECTS ── */
+  .project-list { display: flex; flex-direction: column; gap: 0.4rem; }
+  .project-item {
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+  }
+  .project-item:last-child { border-bottom: none; }
+  .project-logo {
+    flex-shrink: 0;
+    width: 56px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: transparent;
+    border: none;
+  }
+  .project-logo img {
+    height: 32px;
+    width: auto;
+    max-width: 52px;
+    object-fit: contain;
+  }
+  .project-body { flex: 1; min-width: 0; }
+  .project-role {
+    font-family: var(--font-body-en); font-size: 0.85rem;
+    color: var(--ink-secondary);
+    margin-left: auto;
+    flex-shrink: 0;
+    white-space: nowrap;
+    align-self: center;
+  }
+  .project-name {
+    font-family: 'Playfair Display', serif; font-weight: 600;
+    font-size: 1.05rem;
+    line-height: 1.35;
+    margin-bottom: 0.15rem;
+  }
+  .project-meta {
+    font-family: var(--font-body-en); font-size: 0.85rem;
+    color: var(--ink-secondary);
+    line-height: 1.5;
+  }
+  .project-meta .project-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 500;
+    padding: 0.12rem 0.45rem;
+    border-radius: 3px;
+    margin-right: 0.4rem;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .project-tag-gov {
+    background: var(--sidebar-bg);
+    color: var(--sidebar-accent);
+  }
+  .project-tag-ind {
+    background: var(--tag-bg);
+    color: var(--tag-text);
+  }
+
+  .talk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1rem;
+  }
+  .talk-card {
+    background: var(--card-bg); border: 1px solid var(--divider);
+    border-radius: var(--radius); padding: 1.1rem 1.3rem;
+    box-shadow: var(--shadow-sm); transition: transform 0.2s;
+  }
+  .talk-card:hover { transform: translateY(-2px); }
+  .talk-date { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--ink-secondary); }
+  .talk-name { font-weight: 600; font-size: 0.9rem; margin: 0.25rem 0; line-height: 1.35; }
+  .talk-venue { font-size: 0.82rem; color: var(--ink-secondary); }
+
+  .award-list { display: flex; flex-direction: column; gap: 0.25rem; }
+  .award-item {
+    display: flex; gap: 1rem; align-items: baseline;
+    padding: 0.3rem 0; border-bottom: 1px solid #eee;
+  }
+  .award-item:last-child { border-bottom: none; }
+  .award-year {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem; color: var(--ink-secondary);
+    flex-shrink: 0; width: 52px;
+  }
+  .award-desc { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 600; line-height: 1.35; }
+
+  .main-footer {
+    margin-top: 3rem; padding-top: 1.5rem;
+    border-top: 1px solid var(--divider);
+    font-size: 0.88rem; color: var(--ink-secondary);
+    text-align: center;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 860px) {
+    :root { --sidebar-w: 300px; }
+    .main { padding: 2.5rem 2rem 3rem; }
+    .sidebar { padding: 2rem 1.5rem 1.5rem; }
+  }
+  @media (max-width: 680px) {
+    .layout {
+      background: var(--paper);
+    }
+    .layout::before { display: none; }
+    .sidebar-bg-image { display: none; }
+    .layout-center { flex-direction: column; }
+    .sidebar { position: relative; width: 100%; padding: 2rem 1.5rem; left: 0 !important; background: var(--sidebar-bg); }
+    .main { margin-left: 0; max-width: 100%; padding: 2rem 1.5rem 3rem; }
+    .avatar { width: 100px; height: 100px; font-size: 2.2rem; }
+    .sidebar h1 { font-size: 1.5rem; }
+  }
+
+  /* ── LANGUAGE ── */
+  [data-lang="en"] .zh { display: none !important; }
+  [data-lang="zh"] .en { display: none !important; }
+</style>
+</head>
+
+<!-- data-lang="zh" 表示默认显示中文，改为 "en" 则默认英文 -->
+<body data-lang="zh">
+<div class="layout">
+<!-- 侧边栏底部背景图元素（图片路径在 CSS 中搜索 sidebar-bg.png 修改） -->
+<div class="sidebar-bg-image"></div>
+<div class="layout-center">
+
+<!-- ═══════ LEFT SIDEBAR ═══════ -->
+<aside class="sidebar">
+  <div class="sidebar-content">
+
+    <!-- ═══ 区域1：固定在顶部的个人信息（头像、姓名、职称、链接图标） ═══ -->
+    <div class="sidebar-top">
+      <div class="avatar">
+        <!-- 待填充：个人照片，替换 img/photo.jpg，建议 400×400px 正方形 JPG -->
+        <img src="img/photo.jpg" alt="Photo" style="width:100%;height:100%;object-fit:cover;border-radius:50%">
+      </div>
+
+      <!-- 待填充：姓名（中文和英文） -->
+      <h1>
+        <span class="zh">蔡愚</span>
+        <span class="en">Yu Cai</span>
+      </h1>
+      <div class="name-en">
+        <span class="zh">Yu Cai</span>
+        <span class="en">蔡愚</span>
+      </div>
+
+      <!-- 待填充：职称或身份描述 -->
+      <div class="title-line">
+        <span class="zh">博士候选人（直接攻博）</span>
+        <span class="en">Ph.D. Candidate</span>
+      </div>
+      <!-- 待填充：学校、院系、导师信息 -->
+      <div class="affiliation">
+        <span class="zh">浙江大学 · 计算机科学与技术学院<br>导师：陈柳青 百人计划研究员</span>
+        <span class="en">College of Computer Science and Technology<br>Zhejiang University · Advisor: Prof. Liuqing Chen</span>
+      </div>
+
+      <!-- 待填充：联系方式链接（邮箱地址在 onclick 中修改，其他替换 href） -->
+      <div class="sidebar-links">
+        <a id="email-link" href="#" title="Email" onclick="window.location.href='mai'+'lto:'+'cai_yu'+'@'+'zju.edu.cn'; return false;">
+          <span class="icon-circle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+        </a>
+        <a href="https://scholar.google.com/citations?user=RHLWEu8AAAAJ" target="_blank" rel="noopener" title="Google Scholar">
+          <span class="icon-circle"><i class="ai ai-google-scholar" style="font-size:18px"></i></span>
+        </a>
+        <a href="https://www.researchgate.net/profile/Yu-Cai-81" target="_blank" rel="noopener" title="ResearchGate">
+          <span class="icon-circle"><i class="ai ai-researchgate" style="font-size:18px"></i></span>
+        </a>
+        <a href="doc/cv.pdf" target="_blank" title="CV">
+          <span class="icon-circle"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg></span>
+        </a>
+      </div>
+    </div>
+
+    <!-- ═══ 区域2：可滚动的导航链接列表 ═══ -->
+    <!-- 待填充：如果增减了右侧的板块，需要在这里同步增减对应的导航链接 -->
+    <div class="sidebar-mid">
+      <nav class="sidebar-nav">
+        <a href="#about"><span class="zh">关于我</span><span class="en">About</span></a>
+        <!-- 暂时隐藏：研究方向板块已注释
+        <a href="#research"><span class="zh">研究方向</span><span class="en">Research</span></a>
+        -->
+        <a href="#publications"><span class="zh">论文发表</span><span class="en">Publications</span></a>
+        <a href="#contributing"><span class="zh">参与论文</span><span class="en">Contributing</span></a>
+        <a href="#education"><span class="zh">教育背景</span><span class="en">Education</span></a>
+        <a href="#teaching"><span class="zh">教学经历</span><span class="en">Teaching</span></a>
+        <a href="#projects"><span class="zh">参与项目</span><span class="en">Projects</span></a>
+        <!-- 暂时隐藏：学术报告板块已注释，如需恢复请取消此处和下方板块的注释
+        <a href="#talks"><span class="zh">学术报告</span><span class="en">Talks</span></a>
+        -->
+        <a href="#awards"><span class="zh">获奖荣誉</span><span class="en">Awards</span></a>
+      </nav>
+    </div>
+
+    <!-- ═══ 区域3：固定在底部的中英文切换按钮 ═══ -->
+    <div class="sidebar-bottom">
+      <div class="lang-toggle">
+        <button class="lang-btn active" data-l="zh" onclick="switchLang('zh')">中文</button>
+        <button class="lang-btn" data-l="en" onclick="switchLang('en')">EN</button>
+      </div>
+    </div>
+
+  </div>
+</aside>
+
+<!-- ═══════ RIGHT MAIN ═══════ -->
+<main class="main">
+<div class="main-inner">
+
+  <!-- ═══ 板块：关于我 ═══
+       待填充：个人简介文本（中英文） -->
+  <div class="section" id="about">
+    <div class="section-header">
+      <span class="section-title"><span class="zh">关于我</span><span class="en">About Me</span></span>
+      <span class="line"></span>
+    </div>
+    <div class="bio-block">
+      <span class="zh">
+        我是浙江大学计算机科学与技术学院设计学专业的博士候选人（直接攻博），导师为<strong>陈柳青研究员</strong>。<br>
+        我的研究涉及<strong>人-计算机交互（HCI）</strong>、<strong>人-机器人交互（HRI）</strong>、<strong>虚拟现实（VR）</strong>及<strong>智能设计</strong>等方向。<br>
+        在博士期间，我在 <strong>Science Robotics</strong>、<strong>IEEE TVCG</strong>、<strong>IEEE VR</strong>、<strong>CHI</strong> 等期刊与会议发表了多篇论文。
+      </span>
+      <span class="en">
+        I am a Ph.D. candidate in Design at the College of Computer Science and Technology, Zhejiang University, advised by <strong>Prof. Liuqing Chen</strong>.<br><br>
+        My research spans <strong>Human-Computer Interaction (HCI)</strong>, <strong>Human-Robot Interaction (HRI)</strong>, <strong>Virtual Reality (VR)</strong>, and <strong>Intelligent Design</strong>.<br><br>
+        I have published at top venues including <strong>Science Robotics</strong>, <strong>IEEE TVCG</strong>, <strong>IEEE VR</strong>, and <strong>CHI</strong>.
+      </span>
+    </div>
+    <div class="bio-callout">
+      <span class="zh">🎓 我预计于 <strong>2027 年 6 月</strong>毕业，预计年内将开始寻找教职机会；也欢迎对教育机器人方向感兴趣的同学通过邮箱与我探讨合作。</span>
+      <span class="en">🎓 I expect to graduate in <strong>June 2027</strong> and will begin seeking faculty positions later this year. I also welcome students interested in educational robotics to reach out for potential collaboration.</span>
+    </div>
+  </div>
+
+  <!-- ═══ 板块：研究方向 ═══ 已暂时注释
+       待填充：每张卡片的背景图(background-image)、图标(rc-icon)、标题(h3)、描述(p)
+  <div class="section" id="research">
+    <div class="section-header">
+      <span class="section-title"><span class="zh">研究方向</span><span class="en">Research Interests</span></span>
+      <span class="line"></span>
+    </div>
+    <div class="research-grid">
+      <div class="research-card">
+        <div class="rc-bg" style="background-image: url('img/research/hri.jpg')"></div>
+        <div class="rc-content">
+          <div class="rc-icon">🤖</div>
+          <h3><span class="zh">人-机器人交互</span><span class="en">Human-Robot Interaction</span></h3>
+          <p><span class="zh">研究机器人在教育、协作设计等场景中与人的交互方式，探索机器人的具身性与社交主体性。</span><span class="en">Exploring how robots interact with humans in education and collaborative design, investigating embodiment and social subjecthood.</span></p>
+        </div>
+      </div>
+      <div class="research-card">
+        <div class="rc-bg" style="background-image: url('img/research/vr.jpg')"></div>
+        <div class="rc-content">
+          <div class="rc-icon">🥽</div>
+          <h3><span class="zh">虚拟现实</span><span class="en">Virtual Reality</span></h3>
+          <p><span class="zh">研究VR环境下的多模态感知、文本输入及空间交互等关键技术，构建自然沉浸的虚拟体验。</span><span class="en">Multimodal perception, text entry, and spatial interaction in VR, building natural and immersive virtual experiences.</span></p>
+        </div>
+      </div>
+      <div class="research-card">
+        <div class="rc-bg" style="background-image: url('img/research/design.jpg')"></div>
+        <div class="rc-content">
+          <div class="rc-icon">🎨</div>
+          <h3><span class="zh">智能设计</span><span class="en">Intelligent Design</span></h3>
+          <p><span class="zh">将AI技术融入设计流程，探索人机协作的智能化产品概念创新设计方法。</span><span class="en">Integrating AI into design processes, exploring human-AI collaborative methods for innovative product concept design.</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  研究方向板块注释结束 -->
+
+  <!-- ═══ 板块：代表性论文 ═══
+       待填充：每篇论文的以下内容——
+       · pub-badge: 会议/期刊名称和年份
+       · pub-rank: 等级标签（如 CCF-A）
+       · pub-title: 论文标题
+       · pub-authors: 作者（class="me" 标记本人，class="advisor" 标记导师）
+       · pub-links 中各 href="#": PDF链接、会议/DOI链接
+       · pub-abstract: 论文摘要（中英文）
+       · pub-image-overlay 的 img src: 悬停展开的论文配图（放在 img/pub/ 下） -->
+  <div class="section" id="publications">
+    <div class="section-header">
+      <span class="section-title"><span class="zh">代表性论文</span><span class="en">Selected Publications</span></span>
+      <span class="line"></span>
+    </div>
+    <div class="pub-list">
+
+      <div class="pub-item">
+        <div class="pub-thumb"><span class="zh">图</span><span class="en">Fig</span></div>
+        <!-- 待填充：论文配图路径（放在 img/pub/ 下） --><div class="pub-image-overlay"><img src="img/pub/science-robotics.jpg" alt="figure full"></div>
+        <span class="pub-badge">Science Robotics 2025</span><span class="pub-rank pub-rank-science">Science子刊</span>
+        <div class="pub-title">Observing a robot peer's failures facilitates students' classroom learning</div>
+        <div class="pub-authors"><span class="advisor">Liuqing Chen<span class="advisor-note">†</span></span>*, <span class="me">Yu Cai*</span>, Yuyang Fang, Ziqi Yang, Duowei Xia, Jiaxiang You, Shuhong Xiao, Yaxuan Song, Lingwei Zhan, Juanjuan Chen, <span class="advisor">Lingyun Sun<span class="advisor-note">†</span></span></div>
+        <div class="pub-highlight"><span class="zh">借鉴"有效失败"理论，通过机器人主动示范错误促进学生知识学习、缓解课堂压力。</span><span class="en">Leveraging productive failure theory, a robot peer demonstrating mistakes facilitates student learning and reduces classroom pressure.</span></div>
+        <div class="pub-links">
+          <!-- PDF链接待补充 --><!-- <a class="pub-link" href="#">PDF</a> -->
+          <a class="pub-link pub-link-venue" href="https://doi.org/10.1126/scirobotics.adu5257" target="_blank" rel="noopener">Science Robotics ↗</a>
+          <button class="pub-abstract-toggle" onclick="toggleAbstract(this)"><span class="arrow">▶</span> Abstract</button>
+        </div>
+        <div class="pub-abstract">
+          <p>
+            <span class="zh">根据有效失败（PF）理论，在问题解决过程中经历失败可以增强学生在后续教学中的知识习得。然而，让学生直接面对超出其当前能力的问题可能会对其技能、先验知识和情绪健康造成负担。为此，我们设计了一种社交机器人辅助教学活动，让学生观察机器人的失败尝试，在无需亲身经历失败的情况下提供类似有效失败的准备效应。我们在一所初中开展了两项课堂研究。研究1（N=135）在八年级数学课上比较了三种教学方法——观察机器人失败、个人问题解决失败和直接教学。观察机器人失败组在概念理解方面进步最大，且社交压力最低。后续研究2（N=110）在两周机器人适应期后进一步验证了该方法的有效性。研究结果表明，观察机器人失败对知识习得的效果可与甚至优于亲身经历失败，凸显了社交机器人作为 STEM 教育同伴的价值。</span>
+            <span class="en">According to productive failure (PF) theory, experiencing failure during problem-solving can enhance students' knowledge acquisition in subsequent instruction. However, challenging students with problems beyond their current capabilities may strain their skills, prior knowledge, and emotional well-being. To address this, we designed a social robot-assisted teaching activity in which students observed a robot's unsuccessful problem-solving attempts, offering a PF-like preparatory effect without requiring direct failure. We conducted two classroom-based studies in a middle school setting. In study 1 (N=135), students in the robot failure condition showed the greatest gains in conceptual understanding and reported lower social pressure. Follow-up study 2 (N=110) further validated the method's effectiveness after a 2-week adaptation phase. Our findings suggest that observing the robot's failure has a comparable, or even greater, effect on knowledge acquisition than experiencing failure firsthand, underscoring the value of social robots as peers in STEM education.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-thumb"><span class="zh">图</span><span class="en">Fig</span></div>
+        <!-- 待填充：论文配图路径（放在 img/pub/ 下） --><div class="pub-image-overlay"><img src="img/pub/tvcg-airflow.jpg" alt="figure full"></div>
+        <span class="pub-badge">IEEE TVCG 2025</span><span class="pub-rank">CCF-A</span>
+        <div class="pub-title">Measuring Human Perception of Airflow for Natural Motion Simulation in Virtual Reality</div>
+        <div class="pub-authors"><span class="me">Yu Cai</span>, Sanyi Jin, Zihan Chen, Daiwei Yang, Han Tu, Preben Hansen, Lingyun Sun, <span class="advisor">Liuqing Chen<span class="advisor-note">†</span></span></div>
+        <div class="pub-highlight"><span class="zh">提出了使用气流阵列营造 VR 环境中二维运动体验的方法，并首次定量建模了气流刺激与 VR 运动感觉的映射关系。</span><span class="en">Proposed airflow arrays for 2D motion experiences in VR and established the first quantitative model mapping airflow stimuli to VR motion perception.</span></div>
+        <div class="pub-links">
+          <!-- PDF链接待补充 --><!-- <a class="pub-link" href="#">PDF</a> -->
+          <a class="pub-link pub-link-venue" href="https://doi.org/10.1109/TVCG.2025.3549552" target="_blank" rel="noopener">IEEE TVCG ↗</a>
+          <button class="pub-abstract-toggle" onclick="toggleAbstract(this)"><span class="arrow">▶</span> Abstract</button>
+        </div>
+        <div class="pub-abstract">
+          <p>
+            <span class="zh">气流被认为是诱导虚拟现实中自我运动错觉（vection）和减轻晕动症的有效方法。然而，虚拟运动与被感知为与之一致的气流之间的定量关系尚未被充分探索。本研究通过三个实验填补了这一空白。实验1通过跨模态匹配任务建立了虚拟运动速度与感知一致气流速度之间的强线性相关。实验2引入"气流梯度"概念模拟曲线运动的身体感觉，发现运动半径与左右气流速度差呈线性关系，角速度呈近似二次方模式。实验3基于上述发现开发了动态气流方案，结果表明动态气流能进一步减轻晕动症、增强临场感，提供更自然一致的虚拟运动体验。</span>
+            <span class="en">Airflow is recognized as an effective method for inducing vection and reducing motion sickness in VR. However, the quantitative relationship between virtual motion and consistent airflow has not been fully explored. This study conducted three experiments. Experiment 1 established a strong linear correlation between virtual motion speed and perceived consistent airflow speed. Experiment 2 introduced the "Airflow Gradient" concept for curvilinear motion simulation, revealing linear and near-quadratic relationships. Experiment 3 developed a dynamic airflow scheme that further reduces motion sickness, enhances presence, and provides a more natural virtual motion experience.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-thumb"><span class="zh">图</span><span class="en">Fig</span></div>
+        <!-- 待填充：论文配图路径（放在 img/pub/ 下） --><div class="pub-image-overlay"><img src="img/pub/vr-text-entry.jpg" alt="figure full"></div>
+        <span class="pub-badge">IEEE VR 2024</span><span class="pub-rank">CCF-A</span>
+        <div class="pub-title">Supporting text entry in virtual reality with large language models</div>
+        <div class="pub-authors"><span class="advisor">Liuqing Chen<span class="advisor-note">†</span></span>, <span class="me">Yu Cai</span>, Ruyue Wang, Shixian Ding, Yilin Tang, Preben Hansen, Lingyun Sun</div>
+        <div class="pub-highlight"><span class="zh">首次提出了虚拟现实环境下基于大语言模型的预测性文本输入方法。</span><span class="en">First work proposing LLM-based predictive text entry for virtual reality environments.</span></div>
+        <div class="pub-links">
+          <!-- PDF链接待补充 --><!-- <a class="pub-link" href="#">PDF</a> -->
+          <a class="pub-link pub-link-venue" href="https://doi.org/10.1109/VR58804.2024.00073" target="_blank" rel="noopener">IEEE VR ↗</a>
+          <button class="pub-abstract-toggle" onclick="toggleAbstract(this)"><span class="arrow">▶</span> Abstract</button>
+        </div>
+        <div class="pub-abstract">
+          <p>
+            <span class="zh">虚拟现实中的文本输入在效率和任务负荷方面面临挑战。本研究利用大语言模型（LLM）在上下文感知和文本预测方面的能力，通过减少用户手动按键来提升输入效率。提出了三种 LLM 辅助文本输入方法——简化拼写、内容预测和关键词到句子生成——分别对应英文文本在单词、语法结构和句子层面的上下文可预测性。在 Oculus VR 原型上的用户实验表明，三种方法分别减少了 16.4%、49.9%、43.7% 的手动按键，效率提升 21.4%、74.0%、76.3%，同时显著降低了身体、心理和时间负荷。</span>
+            <span class="en">Text entry in VR often faces challenges in efficiency and task loads. This study leverages LLM capabilities in context perception and text prediction to enhance efficiency by reducing manual keystrokes. Three LLM-assisted methods — Simplified Spelling, Content Prediction, and Keyword-to-Sentence Generation — are introduced at word, grammatical, and sentence levels. User experiments on an Oculus VR prototype demonstrate 16.4%, 49.9%, 43.7% reductions in keystrokes, translating to 21.4%, 74.0%, 76.3% efficiency gains respectively, while significantly reducing physical, mental, and temporal loads.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-thumb"><span class="zh">图</span><span class="en">Fig</span></div>
+        <!-- 待填充：论文配图路径（放在 img/pub/ 下） --><div class="pub-image-overlay"><img src="img/pub/idetc-shopping.jpg" alt="figure full"></div>
+        <span class="pub-badge">IDETC/CIE 2024</span><span class="pub-rank">ZJU设计学B</span>
+        <div class="pub-title">Enhancing VR Shopping With Dynamic Space Re-Arrangements: Towards Contextualized Information Displays and Improved Locomotion</div>
+        <div class="pub-authors"><span class="advisor">Liuqing Chen<span class="advisor-note">†</span></span>, <span class="me">Yu Cai</span>, Ruyue Wang, Preben Hansen, Tingting Zhou, Yankun Zhen, Lingyun Sun</div>
+        <div class="pub-highlight"><span class="zh">研究了虚拟现实购物应用中的空间导航方式和场景设计问题。</span><span class="en">Investigated spatial navigation and scene design in VR shopping applications.</span></div>
+        <div class="pub-links">
+          <!-- PDF链接待补充 --><!-- <a class="pub-link" href="#">PDF</a> -->
+          <a class="pub-link pub-link-venue" href="https://doi.org/10.1115/DETC2024-141136" target="_blank" rel="noopener">IDETC/CIE ↗</a>
+          <button class="pub-abstract-toggle" onclick="toggleAbstract(this)"><span class="arrow">▶</span> Abstract</button>
+        </div>
+        <div class="pub-abstract">
+          <p>
+            <span class="zh">传统 VR 购物应用通常依赖静态的购物空间设计，需要频繁传送。通过对资深网购用户的探索性案例研究，我们发现了交互性、效率、晕动症和产品展示等方面的问题。为此，我们与专业设计师合作提出了购物空间动态重排的概念，用户可以动态重排购物空间及其中的商品，利用百货商店、货架、房间等空间形式适配探索、比较和搭配等不同购物意图。被试内比较实验表明，该方案在参与度、晕动症、任务效率、产品感知和整体用户体验方面均有显著提升。</span>
+            <span class="en">Traditional VR shopping apps rely on static space designs requiring frequent teleportation. Through an exploratory study with experienced online shoppers, we identified issues with interactivity, efficiency, motion sickness, and product presentation. We proposed dynamic rearrangement of shopping space, enabling users to rearrange spaces and products using department store, shelf, and room forms for different shopping intentions. A within-subjects experiment demonstrated significant improvements in involvement, motion sickness, efficiency, product perception, and overall user experience.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-thumb"><span class="zh">图</span><span class="en">Fig</span></div>
+        <!-- 待填充：论文配图路径（放在 img/pub/ 下） --><div class="pub-image-overlay"><img src="img/pub/ijhcs-robot.jpg" alt="figure full"></div>
+        <span class="pub-badge">Under Review</span>
+        <div class="pub-title">From Intelligent Tools to Teammates: How Embodiment and Social Subjecthood Shape Human-AI Collaboration</div>
+        <div class="pub-authors"><span class="me">Yu Cai</span>, Xin Lin, Zihan Chen, Xiaoyi Yin, Yuyang Fang, Fengting Ge, Yihe Wang, Preben Hansen, <span class="advisor">Liuqing Chen<span class="advisor-note">†</span></span></div>
+        <div class="pub-highlight">
+          <span class="zh">提出了基于桌面机器人共同讨论的人机协作设计系统，研究了机器人的具身性与社交主体性对人机协作的影响。</span>
+          <span class="en">Proposed a desktop robot-based collaborative design system and investigated how robot embodiment and social subjecthood affect human-AI collaboration.</span>
+        </div>
+      </div>
+
+    </div>
+    <!-- 论文署名图例说明（† = 导师/通讯，下划线 = 本人，* = 共同一作） -->
+    <p class="pub-footnote"><span class="zh">† 通讯作者/导师；<span class="me-inline">下划线</span> = 本人；* = 共同一作</span><span class="en">† Corresponding/advisor; <span class="me-inline">underlined</span> = me; * = equal contribution</span></p>
+  </div>
+
+
+
+  <!-- ═══ 板块：参与论文 ═══
+       待填充：非主要作者的论文，格式同代表性论文
+       当前为占位条目，请替换 pub-badge、pub-title、pub-authors、href -->
+  <div class="section" id="contributing">
+    <div class="section-header">
+      <span class="section-title"><span class="zh">参与论文</span><span class="en">Contributing Author</span></span>
+      <span class="line"></span>
+    </div>
+    <div class="pub-list pub-list-secondary">
+
+      <!-- CHI 2026 - Honorable Mention -->
+      <div class="pub-item pub-item-secondary">
+        <span class="pub-badge">CHI 2026</span><span class="pub-rank">CCF-A</span><span class="pub-award">⭐ Honorable Mention</span>
+        <div class="pub-title">Take the Dog to the Park: Quadruped Robot for Joint Attention Training with Autistic Children in Naturalistic Settings</div>
+        <div class="pub-authors">Yuyang Fang, Yi Hu, Jiayu Teng, <span class="me">Yu Cai</span>, Jiayang Liu, Feifan Xia, Yilin Tang, <span class="advisor">Liuqing Chen<span class="advisor-note">†</span></span></div>
+        <div class="pub-links">
+          <!-- PDF链接待补充 --><!-- <a class="pub-link" href="#">PDF</a> -->
+          <a class="pub-link pub-link-venue" href="https://doi.org/10.1145/3772318.3791944" target="_blank" rel="noopener">CHI ↗</a>
+          <button class="pub-abstract-toggle" onclick="toggleAbstract(this)"><span class="arrow">▶</span> Abstract</button>
+        </div>
+        <div class="pub-abstract">
+          <p>
+            <span class="zh">针对自闭症儿童的机器人支持共同注意力（JA）干预已显示出良好效果，但大多局限于室内固定机器人，限制了技能泛化和更广泛的发展效益。我们提出了一种利用四足机器狗作为同伴在室内外环境进行 JA 训练的干预方案。机器狗引导儿童关注环境中的分布式目标并发起 JA 任务。一项为期四周的探索性研究表明，六名自闭症儿童的 JA 表现有所提升，并显示出向日常社交交流迁移的迹象。还观察到了运动模仿和新型社交互动等自发行为，表明其具有更广泛的发展潜力。</span>
+            <span class="en">Robot-supported interventions for joint attention (JA) in autistic children have shown encouraging outcomes, yet most remain confined to stationary robots in indoor settings. We introduce an intervention employing a quadruped robot dog as a peer-like partner for JA training across indoor and outdoor environments. A four-week study with six autistic children demonstrated improvements in JA performance and indications of transfer to daily social communication. Spontaneous behaviors such as motor imitation and novel social interactions also emerged, suggesting potential for broader developmental gains.</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- CHI 2024 -->
+      <div class="pub-item pub-item-secondary">
+        <span class="pub-badge">CHI 2024</span><span class="pub-rank">CCF-A</span>
+        <div class="pub-title">Emoeden: Applying Generative Artificial Intelligence to Emotional Learning for Children with High-Function Autism</div>
+        <div class="pub-authors">Yilin Tang, <span class="advisor">Liuqing Chen<span class="advisor-note">†</span></span>, Ziyu Chen, Wenkai Chen, <span class="me">Yu Cai</span>, Yao Du, Fan Yang, Lingyun Sun</div>
+        <div class="pub-links">
+          <!-- PDF链接待补充 --><!-- <a class="pub-link" href="#">PDF</a> -->
+          <a class="pub-link pub-link-venue" href="https://doi.org/10.1145/3613904.3642899" target="_blank" rel="noopener">CHI ↗</a>
+          <button class="pub-abstract-toggle" onclick="toggleAbstract(this)"><span class="arrow">▶</span> Abstract</button>
+        </div>
+        <div class="pub-abstract">
+          <p>
+            <span class="zh">高功能自闭症（HFA）儿童常常面临情绪识别与表达的困难，导致情绪困扰和社交障碍。先前研究中为 HFA 儿童开发的对话代理由于无法动态生成个性化和情境化内容，学习效果有限。我们集成大语言模型和文生图模型开发了 EmoEden 工具。在为期 22 天的研究中，六名 HFA 儿童参与体验，EmoEden 有效吸引了儿童参与并提升了其情绪识别和表达能力。同时，我们识别了生成式 AI 应用于 HFA 儿童情绪学习的优势与潜在风险。</span>
+            <span class="en">Children with high-functioning autism (HFA) often face challenges in emotional recognition and expression. We integrated large language models and text-to-image models to develop EmoEden, a tool supporting HFA children in emotional learning. Over a 22-day study involving six HFA children, EmoEden effectively engaged children and improved their emotional recognition and expression abilities. We also identified advantages and potential risks of applying generative AI to assist HFA children.</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- CHI 2023 -->
+      <div class="pub-item pub-item-secondary">
+        <span class="pub-badge">CHI 2023</span><span class="pub-rank">CCF-A</span>
+        <div class="pub-title">Lasershoes: Low-Cost Ground Surface Detection Using Laser Speckle Imaging</div>
+        <div class="pub-authors">Zihan Yan, Yuxiaotong Lin, <span class="advisor">Guanyun Wang<span class="advisor-note">†</span></span>, <span class="me">Yu Cai</span>, Peng Cao, Haipeng Mi, Yang Zhang</div>
+        <div class="pub-links">
+          <!-- PDF链接待补充 --><!-- <a class="pub-link" href="#">PDF</a> -->
+          <a class="pub-link pub-link-venue" href="https://doi.org/10.1145/3544548.3581344" target="_blank" rel="noopener">CHI ↗</a>
+          <button class="pub-abstract-toggle" onclick="toggleAbstract(this)"><span class="arrow">▶</span> Abstract</button>
+        </div>
+        <div class="pub-abstract">
+          <p>
+            <span class="zh">地面表面通常经过精心设计，具有不同纹理以适应人类环境的功能需求，因而包含丰富的上下文信息。地面检测可支持活动识别、移动健康和情境感知计算等广泛应用。我们提出了 LaserShoes，一种基于激光散斑成像的纹理感知系统，可改装到鞋子上。系统捕获地面产生的散斑图案视频，并使用 ResNet-18 模型实现实时推理。评估结果验证了该方法的可行性。</span>
+            <span class="en">Ground surfaces contain rich context information for smart wearables. We present LaserShoes, a texture-sensing system using laser speckle imaging that can be retrofitted to shoes. The system captures speckle pattern videos on ground surfaces and uses a ResNet-18 model for real-time inference. Evaluation results verified the feasibility of this approach for ground surface detection.</span>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ 板块：教育背景 ═══
+       待填充：时间(tl-date)、学校和专业(h3)、详情(tl-detail)，中英文 -->
+  <div class="section" id="education">
+    <div class="section-header">
+      <span class="section-title"><span class="zh">教育背景</span><span class="en">Education</span></span>
+      <span class="line"></span>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-date">2022.09 – 2027.06 (expected)</div>
+        <h3><span class="zh">浙江大学 · 设计学博士（直接攻博）</span><span class="en">Ph.D. in Design · Zhejiang University</span></h3>
+        <div class="tl-detail"><span class="zh">计算机科学与技术学院 · 导师：陈柳青 百人计划研究员</span><span class="en">College of CS&amp;T · Advisor: Prof. Liuqing Chen · Focus: HCI / HRI / VR / Intelligent Design</span></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2018.09 – 2022.06</div>
+        <h3><span class="zh">浙江大学 · 工业设计学士</span><span class="en">B.S. in Industrial Design · Zhejiang University</span></h3>
+        <div class="tl-detail"><span class="zh">计算机科学与技术学院，工业设计系</span><span class="en">College of CS&amp;T, Dept. of Industrial Design</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 板块：教学经历 ═══
+       待填充：学期(t-term)、课程名(t-course)、角色(t-role)，中英文 -->
+  <div class="section" id="teaching">
+    <div class="section-header">
+      <span class="section-title"><span class="zh">教学经历</span><span class="en">Teaching Experience</span></span>
+      <span class="line"></span>
+    </div>
+    <div class="teaching-list">
+      <div class="teaching-item">
+        <span class="t-term">2022 Fall</span>
+        <span class="t-course"><span class="zh">信息与交互设计技术</span><span class="en">Information &amp; Interaction Design Technology</span></span>
+        <span class="t-role"><span class="zh">助教</span><span class="en">TA</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 板块：参与项目 ═══
+       待填充：每个项目——
+       · project-logo 的 img src: 机构 logo 图片（放在 img/logo/ 下，PNG透明背景）
+       · project-name: 项目名称（中英文）
+       · project-tag: 纵向用 project-tag-gov，横向用 project-tag-ind
+       · project-meta: 来源机构和年份
+       · project-role: 你在项目中的角色（如"主导申请""参与研究"等）
+       按时间倒序排列 -->
+  <div class="section" id="projects">
+    <div class="section-header">
+      <span class="section-title"><span class="zh">参与项目</span><span class="en">Research Projects</span></span>
+      <span class="line"></span>
+    </div>
+    <div class="project-list">
+
+      <!-- 按时间倒序排列；增删项目时复制/删除整个 project-item 块 -->
+
+      <div class="project-item">
+        <div class="project-logo">
+          <img src="img/logo/zjnsf.png" alt="ZJNSF">
+        </div>
+        <div class="project-body">
+          <div class="project-name">
+            <span class="zh">基于AIGC的孤独症儿童艺术教育治疗研究</span>
+            <span class="en">AIGC-Based Art Education Therapy for Children with Autism</span>
+          </div>
+          <div class="project-meta">
+            <span class="project-tag project-tag-gov"><span class="zh">纵向</span><span class="en">Gov.</span></span>
+            <span class="zh">浙江省自然科学基金重点项目 · 2026–2028</span>
+            <span class="en">Zhejiang Provincial NSF Key Project · 2026–2028</span>
+          </div>
+        </div>
+        <!-- 项目角色待补充 --><!-- <div class="project-role"><span class="zh">待填充：角色</span><span class="en">Role TBD</span></div> -->
+      </div>
+
+      <div class="project-item">
+        <div class="project-logo">
+          <img src="img/logo/huawei.png" alt="Huawei">
+        </div>
+        <div class="project-body">
+          <div class="project-name">
+            <span class="zh">多模态交互类移动AI应用体验评估</span>
+            <span class="en">UX Evaluation of Multimodal Interactive Mobile AI Applications</span>
+          </div>
+          <div class="project-meta">
+            <span class="project-tag project-tag-ind"><span class="zh">横向</span><span class="en">Ind.</span></span>
+            <span class="zh">华为 · 2025–2026</span>
+            <span class="en">Huawei · 2025–2026</span>
+          </div>
+        </div>
+        <!-- 项目角色待补充 --><!-- <div class="project-role"><span class="zh">待填充：角色</span><span class="en">Role TBD</span></div> -->
+      </div>
+
+      <div class="project-item">
+        <div class="project-logo">
+          <img src="img/logo/nsfc.png" alt="NSFC">
+        </div>
+        <div class="project-body">
+          <div class="project-name">
+            <span class="zh">图形化编程中创意的评估与激发方法研究</span>
+            <span class="en">Methods for Evaluating and Stimulating Creativity in Visual Programming</span>
+          </div>
+          <div class="project-meta">
+            <span class="project-tag project-tag-gov"><span class="zh">纵向</span><span class="en">Gov.</span></span>
+            <span class="zh">国家自然科学基金青年项目 · 2023–2025</span>
+            <span class="en">NSFC Young Scientists Fund · 2023–2025</span>
+          </div>
+        </div>
+        <!-- 项目角色待补充 --><!-- <div class="project-role"><span class="zh">待填充：角色</span><span class="en">Role TBD</span></div> -->
+      </div>
+
+      <div class="project-item">
+        <div class="project-logo">
+          <img src="img/logo/alibaba.png" alt="Alibaba">
+        </div>
+        <div class="project-body">
+          <div class="project-name">
+            <span class="zh">移动端AR导购的场景体验设计</span>
+            <span class="en">Scene Experience Design for Mobile AR Shopping Guide</span>
+          </div>
+          <div class="project-meta">
+            <span class="project-tag project-tag-ind"><span class="zh">横向</span><span class="en">Ind.</span></span>
+            <span class="zh">阿里巴巴 · 2022–2023</span>
+            <span class="en">Alibaba · 2022–2023</span>
+          </div>
+        </div>
+        <!-- 项目角色待补充 --><!-- <div class="project-role"><span class="zh">待填充：角色</span><span class="en">Role TBD</span></div> -->
+      </div>
+
+      <div class="project-item">
+        <div class="project-logo">
+          <img src="img/logo/most.png" alt="MOST">
+        </div>
+        <div class="project-body">
+          <div class="project-name">
+            <span class="zh">人机协同的智能化产品概念创新设计软件研发</span>
+            <span class="en">Human-AI Collaborative Intelligent Product Concept Design Software</span>
+          </div>
+          <div class="project-meta">
+            <span class="project-tag project-tag-gov"><span class="zh">纵向</span><span class="en">Gov.</span></span>
+            <span class="zh">科技部国家重点研发计划子课题 · 2022–2025</span>
+            <span class="en">MOST National Key R&amp;D Program (Sub-project) · 2022–2025</span>
+          </div>
+        </div>
+        <!-- 项目角色待补充 --><!-- <div class="project-role"><span class="zh">待填充：角色</span><span class="en">Role TBD</span></div> -->
+      </div>
+
+      <div class="project-item">
+        <div class="project-logo">
+          <img src="img/logo/alibaba.png" alt="Alibaba">
+        </div>
+        <div class="project-body">
+          <div class="project-name">
+            <span class="zh">UI设计稿的智能检查与校正</span>
+            <span class="en">Intelligent UI Design Draft Inspection and Correction</span>
+          </div>
+          <div class="project-meta">
+            <span class="project-tag project-tag-ind"><span class="zh">横向</span><span class="en">Ind.</span></span>
+            <span class="zh">阿里巴巴 · 2021–2022</span>
+            <span class="en">Alibaba · 2021–2022</span>
+          </div>
+        </div>
+        <!-- 项目角色待补充 --><!-- <div class="project-role"><span class="zh">待填充：角色</span><span class="en">Role TBD</span></div> -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 暂时隐藏：学术报告板块。如需恢复，取消此注释和侧边栏导航中对应的链接
+  <div class="section" id="talks">
+    <div class="section-header">
+      <span class="section-title"><span class="zh">学术报告</span><span class="en">Invited Talks</span></span>
+      <span class="line"></span>
+    </div>
+    <div class="talk-grid">
+      <div class="talk-card">
+        <div class="talk-date">2026.09</div>
+        <div class="talk-name">Efficient LLM Inference on Edge Devices</div>
+        <div class="talk-venue"><span class="zh">○○大学 AI 研讨会（邀请报告）</span><span class="en">○○ University AI Seminar (Invited)</span></div>
+      </div>
+      <div class="talk-card">
+        <div class="talk-date">2026.07</div>
+        <div class="talk-name">FastDistill: Adaptive Layer Mapping</div>
+        <div class="talk-venue">ICML 2026 Oral Presentation</div>
+      </div>
+      <div class="talk-card">
+        <div class="talk-date">2025.12</div>
+        <div class="talk-name">Knowledge Distillation: Past, Present &amp; Future</div>
+        <div class="talk-venue"><span class="zh">○○实验室午餐研讨会</span><span class="en">○○ Lab Lunch Seminar</span></div>
+      </div>
+    </div>
+  </div>
+  暂时隐藏结束 -->
+
+  <!-- ═══ 板块：获奖与荣誉 ═══
+       待填充：年份(award-year)和描述(award-desc)，中英文 -->
+  <div class="section" id="awards">
+    <div class="section-header">
+      <span class="section-title"><span class="zh">获奖与荣誉</span><span class="en">Honors &amp; Awards</span></span>
+      <span class="line"></span>
+    </div>
+    <div class="award-list">
+      <div class="award-item">
+        <span class="award-year">2025</span>
+        <span class="award-desc"><span class="zh">好设计·菁英奖（中国机械工程学会）</span><span class="en">Good Design Elite Award (CMES)</span></span>
+      </div>
+      <div class="award-item">
+        <span class="award-year">2025</span>
+        <span class="award-desc"><span class="zh">浙江大学陈天洲奖学金</span><span class="en">Chen Tianzhou Scholarship, Zhejiang University</span></span>
+      </div>
+      <div class="award-item">
+        <span class="award-year">2022–</span>
+        <span class="award-desc"><span class="zh">连续四年校级优秀研究生干部、五好研究生</span><span class="en">Outstanding Graduate Student Leader &amp; Five-Star Graduate (4 consecutive years)</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 待填充：页脚姓名和更新日期 -->
+  <div class="main-footer">
+    <span class="zh">© 2026 蔡愚 · 最后更新：2026 年 3 月</span>
+    <span class="en">© 2026 Yu Cai · Last updated: March 2026</span>
+  </div>
+
+</div>
+</main>
+</div><!-- /.layout-center -->
+</div><!-- /.layout -->
+
+<script>
+function switchLang(lang) {
+  document.body.setAttribute('data-lang', lang);
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-l') === lang);
+  });
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+}
+
+// Abstract toggle
+function toggleAbstract(btn) {
+  const abstractEl = btn.closest('.pub-item').querySelector('.pub-abstract');
+  const isOpen = abstractEl.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.section').forEach(el => observer.observe(el));
+
+const sections = document.querySelectorAll('.section[id]');
+const navLinks = document.querySelectorAll('.sidebar-nav a');
+function updateActiveNav() {
+  let current = '';
+  sections.forEach(sec => { if (sec.getBoundingClientRect().top <= 150) current = sec.id; });
+  navLinks.forEach(link => {
+    const active = link.getAttribute('href') === '#' + current;
+    link.style.color = active ? 'var(--sidebar-accent)' : '';
+    link.style.paddingLeft = active ? '0.5rem' : '';
+  });
+}
+window.addEventListener('scroll', updateActiveNav);
+updateActiveNav();
+</script>
+</body>
+</html>
